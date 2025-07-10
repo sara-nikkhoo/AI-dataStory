@@ -452,12 +452,21 @@ merged_data['Growth (%)'] = ((merged_data['Profit_last'] - merged_data['Profit_f
 merged_data['diff'] = (merged_data['Profit_last'] - merged_data['Profit_first'])
 # Display the result
 
+merged_data['url'] = ''
+merged_data.loc[merged_data['Sub-Category'] == 'Paper', 'url'] = 'https://i.imgur.com/ZgdI3dL.png'
+merged_data.loc[merged_data['Sub-Category'] == 'Appliances', 'url'] = 'https://i.imgur.com/UwR77MX.png'
+merged_data.loc[merged_data['Sub-Category'] == 'Storage', 'url'] = 'https://i.imgur.com/lFx343D.png'
 
+filtered_data = merged_data[merged_data['Growth (%)'] > 0]
 
-sub_chart = alt.Chart(merged_data).mark_bar().encode(
+sub_chart = alt.Chart(filtered_data).mark_bar().encode(
     x=alt.X('Sub-Category:N', title='Sub-Category',sort='-y'),
     y=alt.Y('Growth (%):Q', title='Growth (%)'),
-    color=alt.Color('Growth (%):Q', scale=alt.Scale(scheme='blues')),
+    color=alt.condition(
+        alt.datum['Growth (%)'] > 75,
+        alt.value("#80c11e"),
+        alt.value('lightgray')
+ ),
     tooltip=['Sub-Category:N', 'Growth (%):Q']
 ).properties(
     title='Percentage Growth in Profit by Sub-Category'
@@ -465,6 +474,13 @@ sub_chart = alt.Chart(merged_data).mark_bar().encode(
 
 line = alt.Chart(pd.DataFrame({'y': [75]})).mark_rule(color='red').encode(y='y:Q')
 sub_chart = sub_chart + line
+
+sub_chart = sub_chart + alt.Chart(filtered_data).mark_image(width=45, height=45).encode(
+ x=alt.X('Sub-Category', sort='-y'),
+ y=alt.Y('Growth (%)'),
+ url='url'
+ )
+
 sub_chart.configure_axis(
     labelAngle=0  # Ensure labels are horizontal
 ).configure_title(
@@ -474,10 +490,14 @@ sub_chart.configure_axis(
     anchor='start'
 ) 
 st.altair_chart(sub_chart, use_container_width=True)
-sub_chart_last = alt.Chart(merged_data).mark_bar().encode(
+
+sub_chart_last = alt.Chart(filtered_data).mark_bar().encode(
     x=alt.X('Sub-Category:N', title='Sub-Category',sort='-y'),
     y=alt.Y('Profit_last:Q', title='Last Profit'),
-    #color=alt.Color('Growth (%):Q', scale=alt.Scale(scheme='blues')),
+    color=alt.condition(
+        alt.datum['Profit_last'] > 6000,
+        alt.value("#80c11e"),
+        alt.value('lightgray')),
     tooltip=['Sub-Category:N', 'dlastProfit:Q']
 ).properties(
     title='Last Year Profit by Sub-Category'
