@@ -38,13 +38,13 @@ streamlit run app.py
 
 ### Dashboard Overview 
 <p align="center">
-  <img src="https://i.imgur.com/Ymh9o0Y.png" width="600"/>
+  <img src="https://i.imgur.com/Ymh9o0Y.png" width="800"/>
 </p>
 
 <p align="center">
-  <img src="https://i.imgur.com/Nmw2BNX.png" width="600"/>
+  <img src="https://i.imgur.com/Nmw2BNX.png" width="800"/>
 </p>
 
 <p align="center">
-  <img src="https://i.imgur.com/cmK5fn8.png" width="600"/>
+  <img src="https://i.imgur.com/cmK5fn8.png" width="800"/>
 </p>
